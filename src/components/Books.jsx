@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import BookCard from "./BookCard";
+import Loading from "./Loading";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -15,7 +16,7 @@ const Books = () => {
       });
   }, []);
 
-  if (loading) return <h1>Loading...</h1>;
+  if (loading) return <Loading />;
 
   return (
     <div className="mt-10 grid grid-cols-4 gap-3 max-w-6xl mx-auto">
