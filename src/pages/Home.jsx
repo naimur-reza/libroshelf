@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 
 const Home = () => {
   return (
-    <div className="bg-custom-bg">
+    <div className="bg-custom-bg font-sans">
       <Navbar />
       <Books />
     </div>
