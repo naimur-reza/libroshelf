@@ -10,7 +10,13 @@ const Navbar = () => {
       </div>
       <ul className="flex items-center space-x-14 font-medium">
         <Link to="/">
-          <li>Home</li>
+          <li
+            onClick={() => {
+              localStorage.clear();
+            }}
+          >
+            Home
+          </li>
         </Link>
         <Link to="/wishlist">
           <li>My Wishlist</li>

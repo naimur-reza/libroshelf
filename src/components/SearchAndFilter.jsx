@@ -2,13 +2,14 @@
 import { useState } from "react";
 import { Search, ChevronDown } from "lucide-react";
 
-const SearchAndFilter = ({ setSearch, setFilter }) => {
+const SearchAndFilter = ({ setSearch, setFilter, search }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
   return (
     <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 my-8">
       <div className="relative w-full sm:w-2/3 max-w-md">
         <input
+          defaultValue={search}
           onChange={(e) => setSearch(e.target.value)}
           type="text"
           placeholder="Search books"

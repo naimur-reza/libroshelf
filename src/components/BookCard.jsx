@@ -35,11 +35,12 @@ const BookCard = ({ bookData }) => {
   return (
     <div
       key={id}
-      className="relative overflow-hidden rounded-lg shadow-lg bg-gray-900 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+      className="relative overflow-hidden rounded-lg shadow-lg bg-gray-900 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-700/70 cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <img
+        loading="lazy"
         className="w-full   object-cover transition-transform duration-300 transform hover:scale-105"
         src={coverImage}
         alt={`${title} cover`}
@@ -70,12 +71,12 @@ const BookCard = ({ bookData }) => {
               key={index}
               className="text-xs bg-gray-700/80 text-gray-300 rounded-full px-2 py-1"
             >
-              {subject}
+              {subject.split(" --")[0]}
             </span>
           ))}
-          {subjects.length > 3 && (
+          {subjects.length > 2 && (
             <span className="text-gray-400 text-xs self-center">
-              +{subjects.length - 3} more
+              +{subjects.length - 2} more
             </span>
           )}
         </div>

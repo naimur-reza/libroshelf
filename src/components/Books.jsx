@@ -3,13 +3,18 @@ import BookCard from "./BookCard";
 
 import LoadingBar from "react-top-loading-bar";
 import SearchAndFilter from "./SearchAndFilter";
+import Pagination from "./Pagination";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const loadingBarRef = useRef(null);
-
+  const [currentPage, setCurrentPage] = useState(() => {
+    return Number(localStorage.getItem("currentPage")) || 1;
+  });
   const [search, setSearch] = useState(() => {
+    // pagination
+
     return localStorage.getItem("search") || "";
   });
   const [filter, setFilter] = useState(() => {
@@ -39,7 +44,7 @@ const Books = () => {
     try {
       loadingBarRef.current.continuousStart();
       fetch(
-        `https://gutendex.com/books?search=${debouncedSearch}&topic=${filter}`
+        `https://gutendex.com/books?search=${debouncedSearch}&topic=${filter}&page=${currentPage}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -49,7 +54,7 @@ const Books = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [debouncedSearch, filter]);
+  }, [debouncedSearch, filter, currentPage]);
 
   console.log(books);
 
@@ -61,13 +66,31 @@ const Books = () => {
         Book Explorer
       </h1>
 
-      <SearchAndFilter setFilter={setFilter} setSearch={setSearch} />
+      <SearchAndFilter
+        search={search}
+        setFilter={setFilter}
+        setSearch={setSearch}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {books?.results?.map((book) => (
           <BookCard key={book.id} bookData={book} />
         ))}
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={10}
+        onPrevClick={() => {
+          setCurrentPage((prev) => prev - 1);
+          localStorage.setItem("currentPage", currentPage - 1);
+        }}
+        onNextClick={() => {
+          setCurrentPage((prev) => prev + 1);
+          localStorage.setItem("currentPage", currentPage + 1);
+        }}
+        key={1}
+      />
     </div>
   );
 };
