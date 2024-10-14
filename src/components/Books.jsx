@@ -1,22 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import BookCard from "./BookCard";
-// import Loading from "./Loading";
+
+import LoadingBar from "react-top-loading-bar";
 import SearchAndFilter from "./SearchAndFilter";
 
 const Books = () => {
   const [books, setBooks] = useState([]);
-  // const [loading, setLoading] = useState(true);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const loadingBarRef = useRef(null);
+
   const [search, setSearch] = useState(() => {
-    // Get initial value from localStorage or default to empty string
     return localStorage.getItem("search") || "";
   });
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filter, setFilter] = useState(() => {
-    // Get initial value from localStorage or default to empty string
     return localStorage.getItem("filter") || "";
   });
 
-  // Debounce search input
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
@@ -38,12 +37,14 @@ const Books = () => {
 
   useEffect(() => {
     try {
+      loadingBarRef.current.continuousStart();
       fetch(
         `https://gutendex.com/books?search=${debouncedSearch}&topic=${filter}`
       )
         .then((res) => res.json())
         .then((data) => {
           setBooks(data);
+          loadingBarRef.current.complete();
         });
     } catch (error) {
       console.log(error);
@@ -54,13 +55,15 @@ const Books = () => {
 
   return (
     <div className="max-w-6xl mx-auto max-lg:px-3">
+      <LoadingBar color="#f11946" ref={loadingBarRef} />
+
       <h1 className="text-3xl lg:text-4xl font-extrabold my-8 lg:my-16 text-center text-gray-200 uppercase">
         Book Explorer
       </h1>
 
       <SearchAndFilter setFilter={setFilter} setSearch={setSearch} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {books?.results?.map((book) => (
           <BookCard key={book.id} bookData={book} />
         ))}
