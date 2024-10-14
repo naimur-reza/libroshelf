@@ -1,36 +1,13 @@
 /* eslint-disable react/prop-types */
-import { Hash } from "lucide-react";
-import { useEffect, useState } from "react";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { Hash, Trash2 } from "lucide-react";
+import { useState } from "react";
 
-const BookCard = ({ bookData }) => {
+const WishlistCard = ({ bookData, removeFromWishlist }) => {
   const { title, formats, authors, subjects, id } = bookData;
   const [isHovered, setIsHovered] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
 
   const coverImage = formats["image/jpeg"] || "https://via.placeholder.com/150";
   const authorName = authors?.length ? authors[0].name : "Unknown Author";
-
-  const handleWishlist = () => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    const isBookInWishlist = wishlist.some((book) => book.id === id);
-
-    if (isBookInWishlist) {
-      const updatedWishlist = wishlist.filter((book) => book.id !== id);
-      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-      setIsWishlisted(false);
-    } else {
-      const updatedWishlist = [...wishlist, bookData];
-      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-      setIsWishlisted(true);
-    }
-  };
-
-  useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    const isBookInWishlist = wishlist.some((book) => book.id === id);
-    setIsWishlisted(isBookInWishlist);
-  }, [id]);
 
   return (
     <div
@@ -87,14 +64,11 @@ const BookCard = ({ bookData }) => {
           }`}
         >
           <button
-            onClick={handleWishlist}
-            className="text-gray-300 hover:text-red-500 transition-colors duration-300"
+            onClick={() => removeFromWishlist(id)}
+            className="mt-3 flex items-center justify-center w-full bg-rose-600 hover:bg-rose-700 text-sm text-white font-semibold py-2 px-4 rounded transition duration-300"
           >
-            {isWishlisted ? (
-              <FaHeart className="text-red-500 text-xl" />
-            ) : (
-              <FaRegHeart className="text-xl" />
-            )}
+            <Trash2 size={18} className="mr-2" />
+            Remove from wishlist
           </button>
         </div>
       </div>
@@ -102,4 +76,4 @@ const BookCard = ({ bookData }) => {
   );
 };
 
-export default BookCard;
+export default WishlistCard;
