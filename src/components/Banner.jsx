@@ -5,7 +5,7 @@ const Banner = () => {
   return (
     <div className="pt-[64px] min-h-screen">
       <div className="relative">
-        <img className="h-screen lg:-mt-[64px]" src={bannerImage} alt="" />
+        <img className="h-screen -mt-[64px]" src={bannerImage} alt="" />
       </div>
       <div className="absolute inset-0 flex-col flex items-center justify-center z-[2] bg-black/70 gap-3">
         <TextReveal
