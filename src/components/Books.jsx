@@ -1,94 +1,170 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import BookCard from "./BookCard";
-
 import LoadingBar from "react-top-loading-bar";
 import SearchAndFilter from "./SearchAndFilter";
 import Pagination from "./Pagination";
+import TextReveal from "./Animation/TextReveal";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Books = () => {
   const [books, setBooks] = useState([]);
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const loadingBarRef = useRef(null);
-  const [currentPage, setCurrentPage] = useState(() => {
-    return Number(localStorage.getItem("currentPage")) || 1;
-  });
-  const [search, setSearch] = useState(() => {
-    // pagination
+  const paginationRef = useRef(null);
+  const cardContainerRef = useRef(null);
+  const searchFilterRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(
+    () => Number(localStorage.getItem("currentPage")) || 1
+  );
+  const [search, setSearch] = useState(
+    () => localStorage.getItem("search") || ""
+  );
+  const [filter, setFilter] = useState(
+    () => localStorage.getItem("filter") || ""
+  );
 
-    return localStorage.getItem("search") || "";
-  });
-  const [filter, setFilter] = useState(() => {
-    return localStorage.getItem("filter") || "";
-  });
+  const fetchBooks = useCallback(async () => {
+    setError(null);
+    const url = `https://gutendex.com/books?search=${search}&topic=${filter}&page=${currentPage}`;
+
+    try {
+      setIsLoading(true);
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Failed to fetch books");
+      const data = await response.json();
+      setBooks(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [search, filter, currentPage]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 1000);
+    fetchBooks();
+  }, [fetchBooks]);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [search]);
-
-  // Save search and filter to localStorage when they change
   useEffect(() => {
     localStorage.setItem("search", search);
-  }, [search]);
-
-  useEffect(() => {
     localStorage.setItem("filter", filter);
-  }, [filter]);
+    localStorage.setItem("currentPage", currentPage.toString());
+  }, [search, filter, currentPage]);
 
-  const url = `https://gutendex.com/books?search=${debouncedSearch}&topic=${filter}&page=${currentPage}`;
+  const handlePageChange = useCallback((newPage) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
-  useEffect(() => {
-    try {
-      loadingBarRef.current.continuousStart();
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => {
-          setBooks(data);
-          loadingBarRef.current.complete();
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }, [debouncedSearch, filter, currentPage, url]);
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: cardContainerRef.current,
+        start: "top bottom-=100",
+        toggleActions: "play pause resume pause",
+      },
+    });
+
+    tl.from(searchFilterRef.current, {
+      delay: 2,
+      opacity: 0,
+      y: 20,
+      duration: 0.5,
+      ease: "power3.out",
+    });
+
+    gsap.utils.toArray(".book-card").forEach((card) => {
+      gsap.fromTo(
+        card,
+        {
+          opacity: 0,
+          y: 30,
+          duration: 1,
+          stagger: 0.3,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.3,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 65%",
+            end: "bottom 20%",
+            toggleActions: "play pause resume pause",
+          },
+        }
+      );
+    });
+  }, [books]);
+
+  const handleNext = () => {
+    if (!books?.next) return;
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const handlePrev = () => {
+    if (!books?.previous) return;
+    setCurrentPage((prev) => prev - 1);
+  };
 
   return (
     <div className="max-w-6xl mx-auto max-lg:px-3 lg:pt-28 pt-24">
       <LoadingBar color="#ECDFCC" ref={loadingBarRef} />
 
-      <h1 className="text-4xl font-extrabold text-center mt-8 mb-14">
-        <span className="text-white uppercase  ">Explore Latest Books</span>
-      </h1>
+      <TextReveal
+        delay={0.5}
+        text="Welcome to LibroShelf"
+        color="text-white text-center mt-8 mb-14"
+        fontSize="text-5xl"
+      />
 
       <SearchAndFilter
         search={search}
         setFilter={setFilter}
         setSearch={setSearch}
+        onSearch={() => setCurrentPage(1)}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
-        {books?.results?.map((book) => (
-          <BookCard key={book.id} bookData={book} />
-        ))}
+      {error && (
+        <p className="text-red-500 text-center my-4" role="alert">
+          Error: {error}
+        </p>
+      )}
+
+      <div
+        ref={cardContainerRef}
+        className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3"
+        aria-live="polite"
+      >
+        {isLoading ? (
+          <p className="col-span-full text-center text-white">
+            Loading books...
+          </p>
+        ) : (
+          books?.results?.map((book) => (
+            <div key={book.id} className="book-card">
+              <BookCard bookData={book} />
+            </div>
+          ))
+        )}
       </div>
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={10}
-        onPrevClick={() => {
-          setCurrentPage((prev) => prev - 1);
-          localStorage.setItem("currentPage", currentPage - 1);
-        }}
-        onNextClick={() => {
-          setCurrentPage((prev) => prev + 1);
-          localStorage.setItem("currentPage", currentPage + 1);
-        }}
-        key={1}
-      />
+      {!isLoading && books?.results && (
+        <div ref={paginationRef}>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(books.count / 32)}
+            onPrevClick={handlePrev}
+            onNextClick={handleNext}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 };

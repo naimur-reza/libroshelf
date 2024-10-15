@@ -8,7 +8,10 @@ const BookCard = ({ bookData }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
-  const coverImage = formats["image/jpeg"] || "https://via.placeholder.com/150";
+  const coverImage =
+    formats["image/jpeg"] ||
+    "https://ih1.redbubble.net/image.4905811447.8675/flat,750x,075,f-pad,750x1000,f8f8f8.jpg";
+
   const authorName = authors?.length ? authors[0].name : "Unknown Author";
 
   const handleWishlist = () => {

@@ -65,7 +65,7 @@ const WishlistCard = ({ bookData, removeFromWishlist }) => {
         >
           <button
             onClick={() => removeFromWishlist(id)}
-            className="mt-3 flex items-center justify-center w-full bg-rose-600 hover:bg-rose-700 text-sm text-white font-semibold py-2 px-4 rounded transition duration-300"
+            className="mt-3 flex items-center justify-center w-full bg-orange-600 hover:bg-orange-700 text-sm text-white font-semibold py-2 px-4 rounded transition duration-300"
           >
             <Trash2 size={18} className="mr-2" />
             Remove from wishlist
