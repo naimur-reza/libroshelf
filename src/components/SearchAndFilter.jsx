@@ -29,7 +29,7 @@ const SearchAndFilter = ({ setSearch, setFilter, search, onSearch }) => {
           onChange={(e) => setFilter(e.target.value)}
           onFocus={() => setIsSelectOpen(true)}
           onBlur={() => setIsSelectOpen(false)}
-          className="w-full px-4 py-2 lg:py-3 pr-10   bg-[rgba(13,13,13)] text-white border border-gray-700 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out cursor-pointer"
+          className="w-full px-4 py-2 lg:py-3 pr-10   bg-[#10130e] text-white border border-gray-700 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out cursor-pointer"
         >
           <option value="">All Genres</option>
           <option value="children">Children</option>

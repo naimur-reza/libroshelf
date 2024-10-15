@@ -76,13 +76,13 @@ const Books = () => {
         {
           opacity: 0,
           y: 30,
-          duration: 1,
+          duration: 0.6,
           stagger: 0.3,
         },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
+          duration: 0.6,
           stagger: 0.3,
           scrollTrigger: {
             trigger: card,
