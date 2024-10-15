@@ -4,7 +4,7 @@ import Navbar from "../components/Shared/Navbar";
 
 const MainLayout = () => {
   return (
-    <div className="bg-[rgba(13,13,13)]">
+    <div className="bg-[#181C14]">
       <Navbar />
       <div className="min-h-[calc(100vh-120px)]">
         <Outlet />

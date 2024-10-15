@@ -40,12 +40,12 @@ const Books = () => {
     localStorage.setItem("filter", filter);
   }, [filter]);
 
+  const url = `https://gutendex.com/books?search=${debouncedSearch}&topic=${filter}&page=${currentPage}`;
+
   useEffect(() => {
     try {
       loadingBarRef.current.continuousStart();
-      fetch(
-        `https://gutendex.com/books?search=${debouncedSearch}&topic=${filter}&page=${currentPage}`
-      )
+      fetch(url)
         .then((res) => res.json())
         .then((data) => {
           setBooks(data);
@@ -54,16 +54,14 @@ const Books = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [debouncedSearch, filter, currentPage]);
-
-  console.log(books);
+  }, [debouncedSearch, filter, currentPage, url]);
 
   return (
-    <div className="max-w-6xl mx-auto max-lg:px-3">
-      <LoadingBar color="#f11946" ref={loadingBarRef} />
+    <div className="max-w-6xl mx-auto max-lg:px-3 lg:pt-28 pt-24">
+      <LoadingBar color="#ECDFCC" ref={loadingBarRef} />
 
-      <h1 className="text-3xl lg:text-4xl font-extrabold my-8 lg:my-16 text-center text-gray-200 uppercase">
-        Book Explorer
+      <h1 className="text-4xl font-extrabold text-center mt-8 mb-14">
+        <span className="text-white uppercase  ">Explore Latest Books</span>
       </h1>
 
       <SearchAndFilter
