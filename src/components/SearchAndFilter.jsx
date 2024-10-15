@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Search, ChevronDown } from "lucide-react";
 
-const SearchAndFilter = ({ setSearch, setFilter, search }) => {
+const SearchAndFilter = ({ setSearch, setFilter, search, onSearch }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
   return (
@@ -10,7 +10,10 @@ const SearchAndFilter = ({ setSearch, setFilter, search }) => {
       <div className="relative w-full sm:w-2/3 max-w-md">
         <input
           defaultValue={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            onSearch();
+          }}
           type="text"
           placeholder="Search books"
           className="w-full px-4 py-2 lg:py-3 pl-12 pr-4 text-gray-200 bg-transparent border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out"

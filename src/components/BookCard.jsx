@@ -43,8 +43,7 @@ const BookCard = ({ bookData }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <img
-        loading="lazy"
-        className="w-full   object-cover transition-transform duration-300 transform hover:scale-105"
+        className="w-full  transition-transform duration-300 transform hover:scale-105"
         src={coverImage}
         alt={`${title} cover`}
       />

@@ -5,7 +5,10 @@ const Pagination = ({ currentPage, totalPages, onPrevClick, onNextClick }) => {
       {/* Previous Button */}
       <button
         disabled={currentPage === 1}
-        onClick={onPrevClick}
+        onClick={() => {
+          onPrevClick();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
         className="rounded-md border border-slate-300 p-2.5 text-center text-sm text-slate-200 hover:bg-slate-800 hover:text-white disabled:opacity-50"
         type="button"
       >
@@ -32,7 +35,10 @@ const Pagination = ({ currentPage, totalPages, onPrevClick, onNextClick }) => {
       {/* Next Button */}
       <button
         disabled={currentPage === totalPages}
-        onClick={onNextClick}
+        onClick={() => {
+          onNextClick();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
         className="rounded-md border border-slate-300 p-2.5 text-center text-sm text-slate-200 hover:bg-slate-800 hover:text-white disabled:opacity-50"
         type="button"
       >
