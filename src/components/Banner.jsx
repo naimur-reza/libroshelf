@@ -12,7 +12,7 @@ const Banner = () => {
           delay={0.5}
           text="Welcome to LibroShelf"
           color="text-white text-center     "
-          fontSize="text-5xl"
+          fontSize="lg:text-5xl text-4xl"
         />
       </div>
     </div>
