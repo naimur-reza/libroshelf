@@ -29,7 +29,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="h-16 border-b border-gray-700/80 flex items-center px-8 justify-between text-gray-200 bg-[#292927] fixed top-0 w-full z-10">
+    <div className="h-16 border-b border-gray-700/80 flex items-center px-8 justify-between text-gray-200 bg-[#292927]/60 backdrop-blur-sm fixed top-0 w-full z-10">
       <div ref={logoRef} className="flex items-center gap-2 ">
         <BookOpen size={24} className="text-orange-300" />
         <NavLink
