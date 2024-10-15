@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
+import Loader2 from "../components/ui/Loader2";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -41,7 +42,7 @@ const BookDetails = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center text-gray-200">Loading...</div>;
+    return <Loader2 />;
   }
 
   if (error) {
