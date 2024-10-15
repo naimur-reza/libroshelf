@@ -52,4 +52,4 @@ To get a local copy of the project up and running, follow these steps:
 
 ## Screenshots
 
-![App Screenshot](https://ibb.co.com/CWWB9Cm)
+![App Screenshot](https://i.ibb.co.com/Wssnz8G/Screenshot-15-10-2024-162458-localhost.jpg)
