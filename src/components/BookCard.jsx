@@ -38,19 +38,19 @@ const BookCard = ({ bookData }) => {
   return (
     <div
       key={id}
-      className="relative overflow-hidden rounded-lg shadow-lg bg-gray-900 hover:shadow-xl transition-all duration-300 transform   border border-gray-700/70 "
+      className="relative overflow-hidden rounded-lg shadow-lg bg-gray-900 hover:shadow-xl transition-all duration-200 transform   border border-gray-700/70 "
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link to={`/books/${id}`}>
         <img
-          className="w-full  transition-transform duration-300 transform hover:scale-105 cursor-pointer"
+          className="w-full min-h-[400px] object-cover transition-transform duration-300 transform hover:scale-105 cursor-pointer"
           src={coverImage}
           alt={`${title} cover`}
         />
       </Link>
       {/* Book ID */}
-      <div className="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center ">
+      <div className="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full flex items-center ">
         <Hash size={12} className="mr-1" />
         <span>{id}</span>
       </div>
