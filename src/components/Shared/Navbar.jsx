@@ -46,7 +46,7 @@ const Navbar = () => {
           </h1>
         </NavLink>
       </div>
-      <ul className="flex items-center space-x-14 font-medium">
+      <ul className="flex items-center space-x-5 lg:space-x-14 font-medium">
         <NavLink
           className={({ isActive }) =>
             isActive ? "text-orange-400" : "text-white"

@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useLayoutEffect, useRef } from "react";
+import { useRef } from "react";
 import { gsap } from "gsap";
-import { CSSPlugin } from "gsap/CSSPlugin";
-gsap.registerPlugin(CSSPlugin);
+import { useGSAP } from "@gsap/react";
 
 const TextReveal = ({
   text,
@@ -12,7 +11,7 @@ const TextReveal = ({
 }) => {
   const textRef = useRef(null);
 
-  useLayoutEffect(() => {
+  useGSAP(() => {
     if (typeof window === "undefined") return;
 
     const splitText = text.split(/( )/);

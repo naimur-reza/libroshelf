@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Hash, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const WishlistCard = ({ bookData, removeFromWishlist }) => {
   const { title, formats, authors, subjects, id } = bookData;
@@ -16,11 +17,13 @@ const WishlistCard = ({ bookData, removeFromWishlist }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <img
-        className="w-full   object-cover transition-transform duration-300 transform hover:scale-105"
-        src={coverImage}
-        alt={`${title} cover`}
-      />
+      <Link to={`/books/${id}`}>
+        <img
+          className="w-full  transition-transform duration-300 transform hover:scale-105 cursor-pointer"
+          src={coverImage}
+          alt={`${title} cover`}
+        />
+      </Link>
 
       {/* Book ID */}
       <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full flex items-center">
@@ -30,7 +33,7 @@ const WishlistCard = ({ bookData, removeFromWishlist }) => {
 
       {/* Book details */}
       <div
-        className={`absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent p-4 flex flex-col justify-end transition-opacity duration-300 ${
+        className={`absolute bottom-0 bg-gradient-to-t from-black via-black/50 to-transparent p-4 flex flex-col justify-end transition-opacity duration-300 ${
           isHovered ? "opacity-100" : "opacity-90"
         }`}
       >
