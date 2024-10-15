@@ -1,10 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import BookCard from "./BookCard";
 import SearchAndFilter from "./SearchAndFilter";
 import Pagination from "./Pagination";
+import { debounce } from "../utils/useDebounce"; // Import the debounce function
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Loading from "./ui/Loading";
-import { fetchBooksAPI } from "../api/fetchBooks";
-import { animateBooks } from "./Animation/animateBooks";
+gsap.registerPlugin(ScrollTrigger);
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -23,12 +27,18 @@ const Books = () => {
     () => localStorage.getItem("filter") || ""
   );
 
+  const debouncedFetchBooks = useMemo(() => {
+    return debounce(() => fetchBooks(), 500);
+  }, [search, filter, currentPage]);
   const fetchBooks = useCallback(async () => {
     setError(null);
-    setIsLoading(true);
+    const url = `https://gutendex.com/books?search=${search}&topic=${filter}&page=${currentPage}`;
 
     try {
-      const data = await fetchBooksAPI(search, filter, currentPage);
+      setIsLoading(true);
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Failed to fetch books");
+      const data = await response.json();
       setBooks(data);
     } catch (err) {
       setError(err.message);
@@ -38,8 +48,8 @@ const Books = () => {
   }, [search, filter, currentPage]);
 
   useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks]);
+    debouncedFetchBooks();
+  }, [search, filter, currentPage]);
 
   useEffect(() => {
     localStorage.setItem("search", search);
@@ -47,7 +57,47 @@ const Books = () => {
     localStorage.setItem("currentPage", currentPage.toString());
   }, [search, filter, currentPage]);
 
-  animateBooks(cardContainerRef, searchFilterRef, books); // Use animations
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: cardContainerRef.current,
+        start: "top bottom-=100",
+        toggleActions: "play pause resume pause",
+      },
+    });
+
+    tl.from(searchFilterRef.current, {
+      delay: 2,
+      opacity: 0,
+      y: 20,
+      duration: 0.5,
+      ease: "power3.out",
+    });
+
+    gsap.utils.toArray(".book-card").forEach((card) => {
+      gsap.fromTo(
+        card,
+        {
+          opacity: 0,
+          y: 30,
+          duration: 0.6,
+          stagger: 0.3,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.3,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 65%",
+            end: "bottom 20%",
+            toggleActions: "play pause resume pause",
+          },
+        }
+      );
+    });
+  }, [books]);
 
   const handleNext = () => {
     if (!books?.next) return;
