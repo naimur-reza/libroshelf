@@ -125,7 +125,7 @@ const Books = () => {
       )}
 
       {books?.count === 0 && (
-        <p className="text-center my-4" role="alert">
+        <p className="text-center my-4 text-white" role="alert">
           No books found
         </p>
       )}
