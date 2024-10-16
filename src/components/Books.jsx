@@ -28,7 +28,7 @@ const Books = () => {
   );
 
   const debouncedFetchBooks = useMemo(() => {
-    return debounce(() => fetchBooks(), 500);
+    return debounce(() => fetchBooks(), 1000);
   }, [search, filter, currentPage]);
   const fetchBooks = useCallback(async () => {
     setError(null);
