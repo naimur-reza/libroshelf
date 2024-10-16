@@ -124,6 +124,12 @@ const Books = () => {
         </p>
       )}
 
+      {books?.count === 0 && (
+        <p className="text-center my-4" role="alert">
+          No books found
+        </p>
+      )}
+
       {isLoading ? (
         <Loading />
       ) : (
