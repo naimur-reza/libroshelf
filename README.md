@@ -48,7 +48,7 @@ To get a local copy of the project up and running, follow these steps:
 
    ```
 
-5. Open your browser and visit http://localhost:5174
+5. Open your browser and visit http://localhost:5173
 
 ## Screenshots
 
